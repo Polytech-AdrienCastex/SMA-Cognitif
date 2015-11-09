@@ -1,6 +1,6 @@
-package message;
+package model.message;
 
-import message.information.Information;
+import model.message.information.Information;
 
 /**
  *
@@ -27,8 +27,8 @@ public class MessageContent
     {
         return performatif;
     }
-    public Information getInformation()
+    public <T extends Information> T getInformation()
     {
-        return information;
+        return (T)information;
     }
 }

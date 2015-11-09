@@ -1,6 +1,6 @@
-package message;
+package model.message;
 
-import agent.Agent;
+import model.agent.Agent;
 
 /**
  *
@@ -18,4 +18,14 @@ public class Message
     private final Agent from;
     private final Agent to;
     private final MessageContent content;
+    
+    public Agent getFrom()
+    {
+        return from;
+    }
+    
+    public MessageContent getContent()
+    {
+        return content;
+    }
 }

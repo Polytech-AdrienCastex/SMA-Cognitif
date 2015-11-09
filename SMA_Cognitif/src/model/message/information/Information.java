@@ -1,4 +1,4 @@
-package message.information;
+package model.message.information;
 
 /**
  *
