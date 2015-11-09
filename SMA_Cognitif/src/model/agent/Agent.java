@@ -1,11 +1,8 @@
 package model.agent;
 
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import model.agent.pathfinding.AStar;
-import model.agent.pathfinding.DirectPath;
 import model.agent.pathfinding.PathFinding;
 import model.environment.AgentSystem;
 import model.environment.Case;
@@ -39,6 +36,7 @@ public class Agent extends Thread
     private final PathFinding pathFinder;
     private final Case destination;
     private Case currentCase;
+    private boolean interrupted;
     
     public Case getCurrentCase()
     {
@@ -69,7 +67,26 @@ public class Agent extends Thread
                 .map(as.getGrid()::getCase)
                 .filter(cc -> cc != null);
     }
-    
+
+    @Override
+    public void interrupt()
+    {
+        super.interrupt();
+        this.interrupted = true;
+    }
+
+    @Override
+    public synchronized void start()
+    {
+        this.interrupted = false;
+        super.start();
+    }
+
+    @Override
+    public boolean isInterrupted()
+    {
+        return interrupted || super.isInterrupted();
+    }
     
     protected void sleep(int time)
     {
@@ -89,34 +106,38 @@ public class Agent extends Thread
             if(as.getMailBox().hasPendingMessage(this))
             {
                 Message msg = as.getMailBox().getPendingMessage(this);
-                MessageContent mc = msg.getContent();
                 
-                switch(mc.getAction())
+                if(msg != null)
                 {
-                    case Move:
-                        InformationFrom f = mc.getInformation();
-                        
-                        if(currentCase.getLocation().equals(f.getLocation()))
-                        { // Move
-                            Random rnd = new Random();
-                            Case c = getCloseLocations()
-                                    .filter(Case::isEmpty)
-                                    .sorted((c1, c2) -> Integer.compare(rnd.nextInt(), rnd.nextInt()))
-                                    .findFirst()
-                                    .orElse(null);
-                            if(c != null)
-                                c.setAgent(this);
-                            else
-                            {
-                                c = getCloseLocations()
-                                        .filter(cc -> !cc.equals(msg.getFrom().currentCase))
+                    MessageContent mc = msg.getContent();
+
+                    switch(mc.getAction())
+                    {
+                        case Move:
+                            InformationFrom f = mc.getInformation();
+
+                            if(currentCase.getLocation().equals(f.getLocation()))
+                            { // Move
+                                Random rnd = new Random();
+                                Case c = getCloseLocations()
+                                        .filter(Case::isEmpty)
                                         .sorted((c1, c2) -> Integer.compare(rnd.nextInt(), rnd.nextInt()))
                                         .findFirst()
-                                        .get();
-                                as.getMailBox().putPendingMessage(this, c.getAgent(), new MessageContent(Action.Move, Performatif.Request, new InformationFrom(c.getLocation())));
+                                        .orElse(null);
+                                if(c != null)
+                                    c.setAgent(this);
+                                else
+                                {
+                                    c = getCloseLocations()
+                                            .filter(cc -> !cc.equals(msg.getFrom().currentCase))
+                                            .sorted((c1, c2) -> Integer.compare(rnd.nextInt(), rnd.nextInt()))
+                                            .findFirst()
+                                            .get();
+                                    as.getMailBox().putPendingMessage(this, c.getAgent(), new MessageContent(Action.Move, Performatif.Request, new InformationFrom(c.getLocation())));
+                                }
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
             }
             else if(!destination.equals(currentCase))
@@ -135,5 +156,6 @@ public class Agent extends Thread
             
             sleep(new Random().nextInt(1000));
         }
+                System.out.println("!!!!! CLOSE");
     }
 }

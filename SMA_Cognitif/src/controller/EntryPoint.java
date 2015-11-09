@@ -39,7 +39,6 @@ public class EntryPoint
                 .dispatchAgents()
                 .startAgents();
         
-        new MainFrame(as.getGrid()).setVisible(true);
+        new MainFrame(as).setVisible(true);
     }
-    
 }

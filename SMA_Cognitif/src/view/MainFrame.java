@@ -2,17 +2,23 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.JFrame;
+import model.environment.AgentSystem;
 import model.environment.Grid;
 
 /**
  *
  * @author Adrien
  */
-public class MainFrame extends JFrame
+public class MainFrame extends JFrame implements WindowListener
 {
-    public MainFrame(Grid grid)
+    public MainFrame(AgentSystem as)
     {
+        this.as = as;
+        Grid grid = as.getGrid();
+        
         this.setLayout(new GridLayout(grid.getSize().x, grid.getSize().y, 5, 5));
         
         this.setPreferredSize(new Dimension(400, 400));
@@ -23,6 +29,40 @@ public class MainFrame extends JFrame
                 .map(Case::new)
                 .forEachOrdered(this::add);
         
+        this.addWindowListener(this);
+        
         this.pack();
     }
+    
+    private final AgentSystem as;
+    
+    @Override
+    public void windowOpened(WindowEvent e)
+    { }
+
+    @Override
+    public void windowClosing(WindowEvent e)
+    {
+        as.stopAgents();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e)
+    { }
+
+    @Override
+    public void windowIconified(WindowEvent e)
+    { }
+
+    @Override
+    public void windowDeiconified(WindowEvent e)
+    { }
+
+    @Override
+    public void windowActivated(WindowEvent e)
+    { }
+
+    @Override
+    public void windowDeactivated(WindowEvent e)
+    { }
 }
