@@ -23,16 +23,16 @@ public class Agent extends Thread
     {
         this.destination = destination;
         this.currentCase = null;
-        
+
         this.setName(name);
-        
+
         this.pathFinder = new AStar();
     }
     public Agent(Case destination)
     {
         this(destination.getLocation().x + ":" + destination.getLocation().y, destination);
     }
-    
+
     private final PathFinding pathFinder;
     private final Case destination;
     private Case currentCase;
@@ -46,14 +46,14 @@ public class Agent extends Thread
     {
         this.currentCase = currentCase;
     }
-    
+
     private AgentSystem as;
     public void setAgentSystem(AgentSystem as)
     {
         this.as = as;
     }
-    
-    
+
+
     protected Stream<Case> getCloseLocations()
     {
         Vector2D location = getCurrentCase().getLocation();
@@ -153,7 +153,7 @@ public class Agent extends Thread
                     futureCase.setAgent(this);
                 }
             }
-            
+
             sleep(new Random().nextInt(1000));
         }
                 System.out.println("!!!!! CLOSE");
