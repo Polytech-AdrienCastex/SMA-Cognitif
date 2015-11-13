@@ -24,6 +24,11 @@ public class Message
         return from;
     }
     
+    public Agent getTo()
+    {
+        return to;
+    }
+    
     public MessageContent getContent()
     {
         return content;

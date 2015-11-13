@@ -156,6 +156,5 @@ public class Agent extends Thread
 
             sleep(new Random().nextInt(1000));
         }
-                System.out.println("!!!!! CLOSE");
     }
 }

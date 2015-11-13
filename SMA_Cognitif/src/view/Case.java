@@ -36,6 +36,7 @@ public class Case extends JPanel implements Observer
     protected void updateText()
     {
         Agent a = c.getAgent();
+        text.setForeground(AgentManager.getColorFromAgent(a));
         text.setText(a == null ? "" : a.getName());
     }
 
