@@ -1,11 +1,13 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.scene.layout.VBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import model.agent.Agent;
@@ -15,13 +17,13 @@ public class MailBox extends JPanel implements Observer
 {
     public MailBox(model.message.MailBox mb)
     {
-        this.mb = mb;
         this.cmps = new HashMap<>();
+        
+        mb.addObserver(this);
         
         this.setLayout(new GridLayout(3, 30));
     }
     
-    private final model.message.MailBox mb;
     private final Map<Agent, JComponent> cmps;
     
     protected JComponent getComponent(Agent agent)
@@ -29,7 +31,9 @@ public class MailBox extends JPanel implements Observer
         if(!cmps.containsKey(agent))
         {
             JComponent c = new JPanel();
+            c.setBackground(AgentManager.getColorFromAgent(agent));
             cmps.put(agent, c);
+            this.add(c);
         }
         
         return cmps.get(agent);
@@ -46,18 +50,18 @@ public class MailBox extends JPanel implements Observer
         switch(notification.action)
         {
             case Add:
-                JPanel panel = new JPanel();
-                Label label = new Label("");
+                Label label = new Label();
                 label.setBackground(AgentManager.getColorFromAgent(notification.msg.getFrom()));
                 label.setText(notification.msg.getContent().getAction().name());
-                panel.add(label);
                 
-                getComponent(notification.msg.getTo())
-                        .add(panel);
+                JComponent c = getComponent(notification.msg.getTo());
+                c.add(label);
                 break;
                 
             case Remove:
                 break;
         }
+        
+        this.repaint();
     }
 }
