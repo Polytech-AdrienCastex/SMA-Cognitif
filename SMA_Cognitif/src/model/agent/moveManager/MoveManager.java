@@ -8,11 +8,25 @@ import java.util.LinkedList;
  * Created by benoitvuillemin on 09/11/2015.
  */
 public class MoveManager implements IMoveManager {
-    Case destination;
     LinkedList<Case> history;
+    private final int maxHistory;
 
-    protected int compareCase(Case c1, Case c2)
-    {
+    public MoveManager(int maxHistory) {
+        this.maxHistory = maxHistory;
+        history = new LinkedList<>();
+
+    }
+
+    /**
+     * Defines if a Case is "greater" than an other.
+     * A Case is greater if it's older (in the history) than the other Case
+     *
+     * @param c1 First Case
+     * @param c2 Second Case
+     * @return the difference between the two cases
+     */
+    @Override
+    public int compare(Case c1, Case c2) {
         int index_c1 = history.indexOf(c1);
         int index_c2 = history.indexOf(c2);
         index_c1 = index_c1 == -1 ? Integer.MAX_VALUE : index_c1;
@@ -20,13 +34,15 @@ public class MoveManager implements IMoveManager {
         return Integer.compare(index_c1, index_c2);
     }
 
-    public Case getNextMove(Case currentCase)
-    {
-        return null;
-    }
-
-    public void confirmMove(Case c)
-    {
-
+    /**
+     * Add a Case into the history
+     *
+     * @param c Case to add
+     */
+    public void confirmMove(Case c) {
+        history.add(c);
+        if (history.size() > maxHistory) {
+            history.removeFirst();
+        }
     }
 }
