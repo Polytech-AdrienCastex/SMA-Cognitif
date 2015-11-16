@@ -22,7 +22,10 @@ public class AgentManager
         Color.MAGENTA,
         Color.ORANGE,
         Color.PINK,
-        Color.RED
+        Color.RED,
+        Color.YELLOW,
+        Color.LIGHT_GRAY,
+        Color.WHITE
     };
     private static int colorIndex = 0;
     

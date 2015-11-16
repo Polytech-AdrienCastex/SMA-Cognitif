@@ -1,5 +1,6 @@
 package model.message;
 
+import java.math.BigInteger;
 import model.agent.Agent;
 
 /**
@@ -13,11 +14,26 @@ public class Message
         this.from = from;
         this.to = to;
         this.content = content;
+        
+        this.uid = getUID();
     }
     
     private final Agent from;
     private final Agent to;
     private final MessageContent content;
+    private final BigInteger uid;
+    
+    private static BigInteger suid = BigInteger.ZERO;
+    protected static BigInteger getUID()
+    {
+        suid = suid.add(BigInteger.ONE);
+        return suid;
+    }
+    
+    public BigInteger getID()
+    {
+        return uid;
+    }
     
     public Agent getFrom()
     {

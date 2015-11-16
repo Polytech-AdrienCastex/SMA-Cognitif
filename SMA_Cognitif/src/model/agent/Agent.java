@@ -227,7 +227,7 @@ public class Agent extends Thread
                 }
             }
 
-            sleep(new Random().nextInt(1000));
+            sleep(new Random().nextInt(100) + 100);
         }
     }
 }

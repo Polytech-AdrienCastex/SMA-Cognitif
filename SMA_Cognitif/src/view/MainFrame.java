@@ -2,8 +2,11 @@ package view;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import model.environment.AgentSystem;
 import model.environment.Grid;
@@ -34,9 +37,24 @@ public class MainFrame extends JFrame implements WindowListener
         
         JFrame mailBoxFrame = new JFrame();
         mailBoxFrame.add(new MailBox(as.getMailBox()));
-        mailBoxFrame.setSize(new Dimension(300, 300));
+        mailBoxFrame.setSize(new Dimension(600, 600));
         mailBoxFrame.setLocation(this.getLocation().x + this.getSize().width, this.getLocation().y);
         mailBoxFrame.setVisible(true);
+        
+        JFrame commandFrame = new JFrame();
+        JButton go = new JButton("Go");
+        go.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                as.startAgents();
+            }
+        });
+        commandFrame.add(go);
+        commandFrame.setLocation(this.getLocation().x + this.getSize().width, this.getLocation().y + mailBoxFrame.getSize().height);
+        commandFrame.pack();
+        commandFrame.setVisible(true);
     }
     
     private final AgentSystem as;
