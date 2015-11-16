@@ -2,12 +2,11 @@ package model.environment;
 
 import model.agent.Agent;
 import model.general.Vector2D;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import model.message.MailBox;
 
 /**
@@ -54,7 +53,7 @@ public class AgentSystem
         
         private MailBox mailBox = null;
         private Grid grid = null;
-        private final Collection<Agent> agents = new LinkedList<>();
+        private final Collection<Agent.Builder> agents = new LinkedList<>();
         
         public Builder setMailBox(MailBox mailBox)
         {
@@ -67,31 +66,31 @@ public class AgentSystem
             return this;
         }
         
-        public Builder addAgent(Function<Grid, Agent> agentSupplier)
+        public Builder addAgent(Function<Grid, Agent.Builder> agentSupplier)
         {
             checkGrid();
             
             agents.add(agentSupplier.apply(grid));
             return this;
         }
-        public Builder addAgent(Agent agent)
+        public Builder addAgent(Agent.Builder agent)
         {
             agents.add(agent);
             return this;
         }
-        public Builder addAgents(Function<Grid, Collection<Agent>> agentsSupplier)
+        public Builder addAgents(Function<Grid, Collection<Agent.Builder>> agentsSupplier)
         {
             checkGrid();
             
             addAgents(agentsSupplier.apply(grid));
             return this;
         }
-        public Builder addAgents(Collection<Agent> agents)
+        public Builder addAgents(Collection<Agent.Builder> agents)
         {
             this.agents.addAll(agents);
             return this;
         }
-        public Builder addAgents(Agent[] agents)
+        public Builder addAgents(Agent.Builder[] agents)
         {
             addAgents(Arrays.asList(agents));
             return this;
@@ -110,8 +109,10 @@ public class AgentSystem
             
             if(mailBox == null)
                 mailBox = new MailBox();
-            
-            return new AgentSystem(mailBox, grid, agents);
+
+            return new AgentSystem(mailBox, grid, agents.stream()
+                    .map(Agent.Builder::build)
+                    .collect(Collectors.toList()));
         }
     }
     

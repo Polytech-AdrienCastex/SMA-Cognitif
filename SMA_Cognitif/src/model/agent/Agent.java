@@ -21,6 +21,9 @@ import java.util.stream.Stream;
  */
 public class Agent extends Thread
 {
+    public static Builder create(){
+        return new Builder();
+    }
     public static class Builder
     {
         public Builder()
