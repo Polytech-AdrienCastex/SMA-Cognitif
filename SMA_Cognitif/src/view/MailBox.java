@@ -1,13 +1,12 @@
 package view;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.scene.layout.VBox;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import model.agent.Agent;
@@ -17,12 +16,16 @@ public class MailBox extends JPanel implements Observer
 {
     public MailBox(model.message.MailBox mb)
     {
+        super(new GridLayout(3, 30, 2, 2));
+        
         this.cmps = new HashMap<>();
         
         mb.addObserver(this);
         
-        this.setLayout(new GridLayout(3, 30));
+        pane = this;
     }
+    
+    private JPanel pane;
     
     private final Map<Agent, JComponent> cmps;
     
@@ -30,10 +33,13 @@ public class MailBox extends JPanel implements Observer
     {
         if(!cmps.containsKey(agent))
         {
-            JComponent c = new JPanel();
-            c.setBackground(AgentManager.getColorFromAgent(agent));
+            System.out.println("XXX");
+            JButton c = new JButton("CCC");
+            this.setBackground(AgentManager.getColorFromAgent(agent));
+            c.setSize(100, 100);
             cmps.put(agent, c);
-            this.add(c);
+            pane.add(c);
+            this.repaint();
         }
         
         return cmps.get(agent);

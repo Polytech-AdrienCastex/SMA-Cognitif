@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements WindowListener
         this.pack();
         
         JFrame mailBoxFrame = new JFrame();
-        mailBoxFrame.setContentPane(new MailBox(as.getMailBox()));
+        mailBoxFrame.add(new MailBox(as.getMailBox()));
         mailBoxFrame.setSize(new Dimension(300, 300));
         mailBoxFrame.setLocation(this.getLocation().x + this.getSize().width, this.getLocation().y);
         mailBoxFrame.setVisible(true);

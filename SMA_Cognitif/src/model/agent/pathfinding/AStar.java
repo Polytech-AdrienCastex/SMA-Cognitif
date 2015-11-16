@@ -70,7 +70,7 @@ public class AStar implements PathFinding
         return null;
     }
     
-    protected Case[] getNeighbors(Case c, AgentSystem as)
+    protected static Case[] getNeighbors(Case c, AgentSystem as)
     {
         Vector2D location = c.getLocation();
         return Stream.of(new Vector2D[]
@@ -85,7 +85,7 @@ public class AStar implements PathFinding
                 .toArray(Case[]::new);
     }
     
-    protected Case getFirstNext(Map<Case, Case> cameFrom, Case currentCase, Case destinationCase)
+    protected static Case getFirstNext(Map<Case, Case> cameFrom, Case currentCase, Case destinationCase)
     {
         Case current = destinationCase;
         while(cameFrom.get(current) != currentCase)
@@ -95,11 +95,11 @@ public class AStar implements PathFinding
         return current;
     }
     
-    protected double h_cost(Case from, Case to)
+    protected static double h_cost(Case from, Case to)
     {
         return dist(from, to);
     }
-    protected double dist(Case from, Case to)
+    protected static double dist(Case from, Case to)
     {
         Vector2D f = from.getLocation();
         Vector2D t = to.getLocation();
