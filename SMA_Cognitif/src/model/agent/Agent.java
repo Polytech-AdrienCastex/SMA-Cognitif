@@ -1,22 +1,19 @@
 package model.agent;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 import model.agent.moveManager.IMoveManager;
 import model.agent.moveManager.MoveManager;
-import model.agent.pathfinding.AStar;
 import model.agent.pathfinding.PathFinding;
 import model.environment.AgentSystem;
 import model.environment.Case;
-import model.environment.Grid;
 import model.general.Vector2D;
-import model.message.*;
+import model.message.Action;
+import model.message.Message;
+import model.message.MessageContent;
+import model.message.Performatif;
 import model.message.information.InformationFrom;
+
+import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  *
@@ -106,6 +103,10 @@ public class Agent extends Thread
     public void setCurrentCase(Case currentCase)
     {
         this.currentCase = currentCase;
+    }
+
+    public void setAgentSystem(AgentSystem as) {
+        this.as = as;
     }
 
     protected Stream<Case> getCloseLocations()
