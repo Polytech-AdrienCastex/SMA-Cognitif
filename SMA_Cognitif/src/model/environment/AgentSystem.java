@@ -95,7 +95,7 @@ public class AgentSystem
             addAgents(Arrays.asList(agents));
             return this;
         }
-        
+
         
         protected void checkGrid()
         {
@@ -131,14 +131,19 @@ public class AgentSystem
         dispatchAgents(AgentSystem::getRandomLocation);
         return this;
     }
+
     public AgentSystem dispatchAgents(Function<List<Vector2D>, Vector2D> locationSupplier)
     {
+        dispatchAgents(locationSupplier, grid, agents);
+        return this;
+    }
+
+    public static void dispatchAgents(Function<List<Vector2D>, Vector2D> locationSupplier, Grid grid, Collection<Agent> agents)
+    {
         grid.clear();
-        
+
         for(Agent a : agents)
             grid.getCase(locationSupplier.apply(grid.getFreeLocations())).setAgent(a);
-        
-        return this;
     }
     
     public AgentSystem startAgents()

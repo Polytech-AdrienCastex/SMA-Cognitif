@@ -72,8 +72,6 @@ public class Agent extends Thread
                 throw new IllegalStateException("PathFinder is not specified. Use setPathFinder(...).");
             if(destination == null)
                 throw new IllegalStateException("Destination is not specified. Use setDestination(...).");
-            if(currentCase == null)
-                throw new IllegalStateException("CurrentCase is not specified. Use setCurrentCase(...).");
             if(moveManager == null)
                 this.moveManager = new MoveManager(DEFAULT_HISTORY_SIZE);
             if(name == null)
