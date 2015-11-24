@@ -32,7 +32,7 @@ public class AgentManager
     public static Color getColorFromAgent(Agent agent)
     {
         if(!agents.containsKey(agent))
-            agents.put(agent, colors[colorIndex++]);
+            agents.put(agent, colors[(colorIndex++) % colors.length]);
         
         return agents.get(agent);
     }

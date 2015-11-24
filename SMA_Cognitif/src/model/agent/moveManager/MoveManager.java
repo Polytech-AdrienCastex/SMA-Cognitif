@@ -4,17 +4,15 @@ import model.environment.Case;
 
 import java.util.LinkedList;
 
-/**
- * Created by benoitvuillemin on 09/11/2015.
- */
-public class MoveManager implements IMoveManager {
-    LinkedList<Case> history;
+public class MoveManager implements IMoveManager
+{
+    private final LinkedList<Case> history;
     private final int maxHistory;
 
-    public MoveManager(int maxHistory) {
+    public MoveManager(int maxHistory)
+    {
         this.maxHistory = maxHistory;
-        history = new LinkedList<>();
-
+        this.history = new LinkedList<>();
     }
 
     /**
@@ -26,7 +24,8 @@ public class MoveManager implements IMoveManager {
      * @return the difference between the two cases
      */
     @Override
-    public int compare(Case c1, Case c2) {
+    public int compare(Case c1, Case c2)
+    {
         int index_c1 = history.indexOf(c1);
         int index_c2 = history.indexOf(c2);
         index_c1 = index_c1 == -1 ? Integer.MAX_VALUE : index_c1;
@@ -39,10 +38,11 @@ public class MoveManager implements IMoveManager {
      *
      * @param c Case to add
      */
-    public void confirmMove(Case c) {
+    @Override
+    public void confirmMove(Case c)
+    {
         history.add(c);
-        if (history.size() > maxHistory) {
+        while(history.size() > maxHistory)
             history.removeFirst();
-        }
     }
 }

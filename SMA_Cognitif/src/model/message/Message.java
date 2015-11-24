@@ -3,10 +3,6 @@ package model.message;
 import java.math.BigInteger;
 import model.agent.Agent;
 
-/**
- *
- * @author p1002239
- */
 public class Message
 {
     protected Message(Agent from, Agent to, MessageContent content)
@@ -48,5 +44,17 @@ public class Message
     public MessageContent getContent()
     {
         return content;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(!(obj instanceof Message))
+            return false;
+        
+        Message msg = (Message)obj;
+        return msg.from.equals(this.from)
+                && msg.to.equals(this.to)
+                && msg.content.equals(this.content);
     }
 }

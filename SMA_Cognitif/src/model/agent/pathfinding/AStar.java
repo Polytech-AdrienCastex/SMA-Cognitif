@@ -3,25 +3,20 @@ package model.agent.pathfinding;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 import model.environment.AgentSystem;
 import model.environment.Case;
 import model.general.Vector2D;
 
-/**
- *
- * @author Adrien
- */
 public class AStar implements PathFinding
 {
+    private static final Random rnd = new Random();
+    
     @Override
     public Case getNextCase(AgentSystem as, Case currentCase, Case destinationCase)
     {
-        Vector2D size = as.getGrid().getSize();
-        Double values[][] = new Double[size.x][size.y];
-        
-        
         Set<Case> closedSet = new HashSet<>();
         Set<Case> openSet = new HashSet<>();
         openSet.add(currentCase);
@@ -50,27 +45,28 @@ public class AStar implements PathFinding
             openSet.remove(current);
             closedSet.add(current);
             
-            for(Case n : getNeighbors(current, as))
-            {
-                if(closedSet.contains(n))
-                    continue;
-                
-                double tgScore = gScore.get(current) + dist(current, n);
-                if(!openSet.contains(n))
-                    openSet.add(n);
-                else if(tgScore >= gScore.get(n))
-                    continue;
-                
-                cameFrom.put(n, current);
-                gScore.put(n, tgScore);
-                fScore.put(n, gScore.get(n) + h_cost(n, destinationCase));
-            }
+            getNeighbors(current, as)
+                    .forEach(n ->
+                    {
+                        if(closedSet.contains(n))
+                            return;
+
+                        double tgScore = gScore.get(current) + dist(current, n);
+                        if(!openSet.contains(n))
+                            openSet.add(n);
+                        else if(tgScore >= gScore.get(n))
+                            return;
+
+                        cameFrom.put(n, current);
+                        gScore.put(n, tgScore);
+                        fScore.put(n, gScore.get(n) + h_cost(n, destinationCase));
+                    });
         }
         
         return null;
     }
     
-    protected static Case[] getNeighbors(Case c, AgentSystem as)
+    protected static Stream<Case> getNeighbors(Case c, AgentSystem as)
     {
         Vector2D location = c.getLocation();
         return Stream.of(new Vector2D[]
@@ -82,7 +78,7 @@ public class AStar implements PathFinding
                 })
                 .map(as.getGrid()::getCase)
                 .filter(cc -> cc != null)
-                .toArray(Case[]::new);
+                .sorted((c1, c2) -> Integer.compare(rnd.nextInt(), rnd.nextInt()));
     }
     
     protected static Case getFirstNext(Map<Case, Case> cameFrom, Case currentCase, Case destinationCase)
@@ -107,6 +103,6 @@ public class AStar implements PathFinding
         double x = f.x - t.x;
         double y = f.y - t.y;
         
-        return Math.sqrt(x*x + y*y) * (to.isEmpty() ? 1 : 5);
+        return Math.sqrt(x*x + y*y) * (to.isEmpty() ? 1 : 100);
     }
 }

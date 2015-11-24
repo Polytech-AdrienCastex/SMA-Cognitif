@@ -4,10 +4,6 @@ import model.environment.AgentSystem;
 import model.environment.Case;
 import model.general.Vector2D;
 
-/**
- *
- * @author Adrien
- */
 public class DirectPath implements PathFinding
 {
     @Override

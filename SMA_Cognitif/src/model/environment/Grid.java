@@ -7,10 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/**
- *
- * @author p1002239
- */
 public class Grid
 {
     public Grid(int size)

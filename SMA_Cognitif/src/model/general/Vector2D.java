@@ -1,9 +1,5 @@
 package model.general;
 
-/**
- *
- * @author p1002239
- */
 public class Vector2D
 {
     public Vector2D(int x, int y)

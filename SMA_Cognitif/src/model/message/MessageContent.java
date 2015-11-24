@@ -2,10 +2,6 @@ package model.message;
 
 import model.message.information.Information;
 
-/**
- *
- * @author p1002239
- */
 public class MessageContent
 {
     public MessageContent(Action action, Performatif performatif, Information information)
@@ -30,5 +26,18 @@ public class MessageContent
     public <T extends Information> T getInformation()
     {
         return (T)information;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(!(obj instanceof MessageContent))
+            return false;
+        
+        MessageContent mc = (MessageContent)obj;
+        
+        return mc.action.equals(this.action)
+                && mc.information.equals(this.information)
+                && mc.performatif.equals(this.performatif);
     }
 }

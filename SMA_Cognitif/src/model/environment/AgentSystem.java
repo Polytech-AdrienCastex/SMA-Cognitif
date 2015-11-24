@@ -9,10 +9,6 @@ import java.util.stream.Collectors;
 
 import model.message.MailBox;
 
-/**
- *
- * @author Adrien
- */
 public class AgentSystem
 {
     public AgentSystem(MailBox mailBox, Grid grid, Collection<Agent> agents)

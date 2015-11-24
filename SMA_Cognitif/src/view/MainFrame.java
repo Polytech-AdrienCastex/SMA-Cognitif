@@ -6,15 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import model.agent.Agent;
 import model.environment.AgentSystem;
 import model.environment.Grid;
 
-/**
- *
- * @author Adrien
- */
 public class MainFrame extends JFrame implements WindowListener
 {
     public MainFrame(AgentSystem as)
@@ -48,6 +48,20 @@ public class MainFrame extends JFrame implements WindowListener
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        long time = System.currentTimeMillis();
+                        while(!as.getAgents().stream().allMatch(Agent::isPersonnalySatisfied))
+                            try {
+                                sleep(400);
+                            } catch (InterruptedException ex) { }
+                        time = System.currentTimeMillis() - time;
+                        System.out.println("TOTAL TIME = " + time + "ms = " + (time / 1000.0) + "s");
+                    }
+                }).start();
                 as.startAgents();
             }
         });

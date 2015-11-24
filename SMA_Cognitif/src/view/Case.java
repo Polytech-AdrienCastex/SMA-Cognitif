@@ -8,10 +8,6 @@ import java.util.Observer;
 import javax.swing.JPanel;
 import model.agent.Agent;
 
-/**
- *
- * @author Adrien
- */
 public class Case extends JPanel implements Observer
 {
     public Case(model.environment.Case c)

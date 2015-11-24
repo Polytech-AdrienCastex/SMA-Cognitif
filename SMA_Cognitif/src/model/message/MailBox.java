@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Observable;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import model.agent.Agent;
 
 public class MailBox extends Observable
@@ -13,7 +14,7 @@ public class MailBox extends Observable
         this.mails = new HashMap<>();
     }
     
-    private final Map<Agent, LinkedList<Message>> mails;
+    private final Map<Agent, ConcurrentLinkedQueue<Message>> mails;
     
     public static class Notification
     {
@@ -48,12 +49,35 @@ public class MailBox extends Observable
         return msg;
     }
     
+    protected boolean spamProtection(Agent from, Agent to, Message msg)
+    {
+        ConcurrentLinkedQueue<Message> listMsgs = getList(to);
+        
+        if(listMsgs.contains(msg))
+            return false;
+        
+        listMsgs.stream()
+                .filter(m -> m.getFrom().equals(from))
+                .peek(m ->
+                {
+                    setChanged();
+                    notifyObservers(new Notification(m, Notification.Action.Remove));
+                })
+                .forEach(listMsgs::remove);
+        
+        return true;
+    }
+    
     public boolean putPendingMessage(Agent from, Agent to, MessageContent messageContent)
     {
         if(to == null)
             return false;
         
         Message msg = new Message(from, to, messageContent);
+        
+        if(!spamProtection(from, to, msg))
+            return false;
+        
         if(getList(to).add(msg))
         {
             setChanged();
@@ -64,10 +88,10 @@ public class MailBox extends Observable
             return false;
     }
     
-    protected synchronized LinkedList<Message> getList(Agent agent)
+    protected synchronized ConcurrentLinkedQueue<Message> getList(Agent agent)
     {
         if(!mails.containsKey(agent))
-            mails.put(agent, new LinkedList<>());
+            mails.put(agent, new ConcurrentLinkedQueue<>());
         return mails.get(agent);
     }
 }

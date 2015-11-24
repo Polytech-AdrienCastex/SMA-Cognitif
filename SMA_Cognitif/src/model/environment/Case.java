@@ -4,10 +4,6 @@ import java.util.Observable;
 import model.agent.Agent;
 import model.general.Vector2D;
 
-/**
- *
- * @author p1002239
- */
 public class Case extends Observable
 {
     public Case(Vector2D location)
